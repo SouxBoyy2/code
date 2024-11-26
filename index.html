@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Aléatoire</title>
+    <style>
+        /* Définir la police générale et le fond */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #e64a19; /* Couleur rouge de Roblox */
+            color: white;
+        }
+
+        /* Conteneur principal avec une ombre portée */
+        .container {
+            background-color: #2c3e50; /* Couleur sombre pour le fond du container */
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        /* Titre principal */
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #fff;
+            letter-spacing: 3px;
+        }
+
+        /* Paragraphe d'instruction */
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        /* Style du bouton */
+        button {
+            background-color: #ff0a0a; /* Rouge vif typique de Roblox */
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #e64a19; /* Rouge plus sombre lors du survol */
+            transform: translateY(-3px);
+        }
+
+        /* Style du message "Veuillez attendre" et du timer */
+        #waitingText {
+            font-size: 1.2rem;
+            margin-left: 10px;
+            color: #fff;
+        }
+
+        #timer {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #fffae6;
+        }
+
+        /* Style du code généré */
+        .code-container {
+            margin-top: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            background-color: #1a252f; /* Arrière-plan sombre pour le code */
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Style pour désactiver le bouton */
+        .disabled {
+            background-color: #c4c4c4;
+            cursor: not-allowed;
+        }
+
+        /* Animation sur le code généré */
+        .code-container p {
+            transition: transform 0.5s ease;
+        }
+
+        .code-container p:hover {
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Code</h1>
+        <p>Cliquez sur le bouton pour afficher un code aléatoire :</p>
+
+        <button id="generateButton" onclick="genererCode()" class="active">Obtenir un Code</button>
+        <span id="waitingText"></span><span id="timer"></span> <!-- Texte de temporisation et timer -->
+
+        <div class="code-container" id="codeAffiche">
+            <!-- Le code généré s'affichera ici -->
+        </div>
+    </div>
+
+    <script>
+        let canGenerate = true;  // Variable pour savoir si le bouton peut être utilisé
+        let countdown = 30;      // Durée du timer en secondes
+
+        function genererCode() {
+            if (!canGenerate) {
+                return; // Si le bouton est désactivé, on ne fait rien
+            }
+
+            // Les trois codes fixes
+            const codes = [
+                "1452441545",
+                "54154545646",
+                "45454654654"
+            ];
+
+            // Choisir un code aléatoire parmi les trois codes
+            const codeChoisi = codes[Math.floor(Math.random() * codes.length)];
+
+            // Afficher le code dans la div
+            document.getElementById('codeAffiche').innerHTML = `
+                <p>Code: ${codeChoisi}</p>
+            `;
+
+            // Désactiver le bouton pendant 30 secondes
+            canGenerate = false;
+            const button = document.getElementById('generateButton');
+            button.classList.add('disabled'); // Ajoute la classe "disabled" au bouton pour changer son apparence
+            button.innerHTML = "Veuillez attendre...";
+
+            // Démarrer le compte à rebours
+            startTimer();
+
+            // Réactiver le bouton après 30 secondes
+            setTimeout(() => {
+                canGenerate = true;
+                button.classList.remove('disabled');
+                button.innerHTML = "Obtenir un Code"; // Réinitialiser le texte du bouton
+                resetTimer(); // Réinitialiser le timer à 30 secondes
+            }, 30000); // 30000 ms = 30 secondes
+        }
+
+        // Fonction pour démarrer le compte à rebours
+        function startTimer() {
+            const timerElement = document.getElementById('timer');
+            const waitingText = document.getElementById('waitingText');
+            waitingText.innerHTML = "Veuillez attendre ";
+
+            // Mise à jour du timer chaque seconde
+            const countdownInterval = setInterval(() => {
+                if (countdown <= 0) {
+                    clearInterval(countdownInterval);
+                    timerElement.innerHTML = "Terminé";
+                } else {
+                    timerElement.innerHTML = `${countdown} secondes`;
+                    countdown--;
+                }
+            }, 1000);
+        }
+
+        // Fonction pour réinitialiser le timer
+        function resetTimer() {
+            countdown = 30; // Réinitialiser le timer à 30 secondes
+            const timerElement = document.getElementById('timer');
+            timerElement.innerHTML = `${countdown} secondes`;
+        }
+    </script>
+
+</body>
+</html>
